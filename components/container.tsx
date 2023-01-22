@@ -1,9 +1,13 @@
-type Props = {
-  children?: React.ReactNode
+import type { ReactNode } from 'react';
+import cx from 'clsx';
+
+interface Props {
+  children?: ReactNode;
+  className?: string;
 }
 
-const Container = ({ children }: Props) => {
-  return <div className="container mx-auto px-5">{children}</div>
+export function Container({ children, className }: Props) {
+  return (
+    <div className={cx('max-w-6xl px-5 mx-auto', className)}>{children}</div>
+  );
 }
-
-export default Container

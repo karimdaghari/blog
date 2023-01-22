@@ -1,23 +1,69 @@
-import Alert from './alert'
-import Footer from './footer'
-import Meta from './meta'
+import { NextSeo } from 'next-seo';
+import type { ReactNode } from 'react';
+import { Container } from './container';
+import { Footer } from './footer';
+import { Intro, type IntroProps } from './intro';
+import { Navbar } from './navbar';
 
-type Props = {
-  preview?: boolean
-  children: React.ReactNode
+interface Props {
+  children: ReactNode;
+  className?: string;
+  title: string;
+  description?: string;
+  intro?: IntroProps;
 }
 
-const Layout = ({ preview, children }: Props) => {
+export function Layout({
+  children,
+  className,
+  intro,
+  title,
+  description
+}: Props) {
   return (
     <>
-      <Meta />
-      <div className="min-h-screen">
-        <Alert preview={preview} />
-        <main>{children}</main>
-      </div>
-      <Footer />
+      <NextSeo
+        title={title}
+        description={description}
+        titleTemplate='%s | Karim Daghari'
+        twitter={{
+          handle: '@karimdaghari_',
+          site: 'https://karimdaghari.com/'
+        }}
+        additionalLinkTags={[
+          {
+            rel: 'apple-touch-icon',
+            sizes: '180x180',
+            href: '/favicon/apple-touch-icon.png'
+          },
+          {
+            rel: 'icon',
+            type: 'image/png',
+            sizes: '32x32',
+            href: '/favicon/favicon-32x32.png'
+          },
+          {
+            rel: 'icon',
+            type: 'image/png',
+            sizes: '16x16',
+            href: '/favicon/favicon-16x16.png'
+          },
+          { rel: 'manifest', href: '/favicon/site.webmanifest' },
+          { rel: 'shortcut icon', href: '/favicon/favicon.ico' }
+        ]}
+      />
+      <Container className='py-8'>
+        <Navbar />
+        <div className='min-h-screen'>
+          {intro && (
+            <aside>
+              <Intro {...intro} />
+            </aside>
+          )}
+          <main className={className}>{children}</main>
+        </div>
+        <Footer />
+      </Container>
     </>
-  )
+  );
 }
-
-export default Layout

@@ -1,36 +1,34 @@
-import Avatar from './avatar'
-import DateFormatter from './date-formatter'
-import CoverImage from './cover-image'
-import PostTitle from './post-title'
-import type Author from '../interfaces/author'
+import { DateFormatter } from './date-formatter';
+import { CoverImage } from './cover-image';
+import Link from 'next/link';
 
-type Props = {
-  title: string
-  coverImage: string
-  date: string
-  author: Author
+interface Props {
+  parent: {
+    slug: string;
+    title: string;
+  };
+  title: string;
+  coverImage: string;
+  date: string;
 }
 
-const PostHeader = ({ title, coverImage, date, author }: Props) => {
+export function PostHeader({ parent, title, coverImage, date }: Props) {
   return (
     <>
-      <PostTitle>{title}</PostTitle>
-      <div className="hidden md:block md:mb-12">
-        <Avatar name={author.name} picture={author.picture} />
+      <div className='-space-y-2'>
+        <Link
+          href={parent.slug}
+          className='inline-block hover:underline underline-offset-2'>
+          {parent.title} / {title}
+        </Link>
+        <h1>{title}</h1>
       </div>
-      <div className="mb-8 md:mb-16 sm:mx-0">
+      <div className='pt-6 pb-4 md:pb-8'>
         <CoverImage title={title} src={coverImage} />
       </div>
-      <div className="max-w-2xl mx-auto">
-        <div className="block md:hidden mb-6">
-          <Avatar name={author.name} picture={author.picture} />
-        </div>
-        <div className="mb-6 text-lg">
-          <DateFormatter dateString={date} />
-        </div>
+      <div className='pb-4'>
+        <DateFormatter dateString={date} />
       </div>
     </>
-  )
+  );
 }
-
-export default PostHeader
