@@ -1,40 +1,55 @@
-import fs from 'fs';
-import { join } from 'path';
 import matter from 'gray-matter';
+import { Octokit } from 'octokit';
+import slugify from 'slugify';
+import { GITHUB_REPO_NAME, GITHUB_USERNAME } from './constants';
 
-type TDir = 'blog' | 'books';
-
-function getDocsDirectory(dir: TDir) {
-  return join(process.cwd(), `_posts/${dir}`);
-}
+type TLabel = 'blog' | 'book';
 
 interface IGetAllDocs<T> {
-  dir: TDir;
+  label: TLabel;
   fields: T[];
   limit?: number;
-  tags?: string[];
 }
 
 interface IGetDocBySlug extends Omit<IGetAllDocs<string>, 'limit' | 'tags'> {
   slug: string;
 }
 
-function getDocBySlug({ dir, fields = [], slug }: IGetDocBySlug) {
-  const realSlug = slug.replace(/\.md(x?)$/, '');
-  const docsDirectory = getDocsDirectory(dir);
-  const fullPath = join(docsDirectory, `${realSlug}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN
+});
 
-  const items: Record<string, string | undefined> = {};
+const REPO = `${GITHUB_USERNAME}/${GITHUB_REPO_NAME}`;
+
+async function getDocBySlug({ label, fields = [], slug }: IGetDocBySlug) {
+  const {
+    data: {
+      items: [{ body, title, created_at: date }]
+    }
+  } = await octokit.rest.search.issuesAndPullRequests({
+    q: `repo:${REPO} is:issue is:open label:${label} in:title ${slug.replaceAll(
+      '-',
+      ' '
+    )}`
+  });
+  const { data, content } = matter(body);
+
+  const items: Record<string, string | undefined> = {
+    title
+  };
 
   // Ensure only the minimal needed data is exposed
   fields.forEach((field) => {
     if (field === 'slug') {
-      items[field] = realSlug;
+      items[field] = slug;
     }
+
     if (field === 'content') {
       items[field] = content;
+    }
+
+    if (field === 'date' && typeof data[field] === 'undefined') {
+      items[field] = date;
     }
 
     if (typeof data[field] !== 'undefined') {
@@ -45,49 +60,38 @@ function getDocBySlug({ dir, fields = [], slug }: IGetDocBySlug) {
   return items;
 }
 
-function getAllDocs({ dir, fields = [], limit, tags }: IGetAllDocs<string>) {
-  const directory = getDocsDirectory(dir);
-  const slugs = fs.readdirSync(directory);
-  const docs = slugs
-    .map((slug) => getDocBySlug({ slug, fields, dir }))
-    .filter((post) =>
-      !tags?.length ? true : tags.some((tag) => post.tags?.includes(tag))
-    )
-    // sort posts by date in descending order
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1))
-    .slice(0, limit);
+async function getAllDocs({ label, fields = [], limit }: IGetAllDocs<string>) {
+  const { data: ghData } = await octokit.rest.issues.listForRepo({
+    owner: GITHUB_USERNAME,
+    repo: GITHUB_REPO_NAME,
+    creator: GITHUB_USERNAME,
+    labels: label,
+    per_page: limit,
+    sort: 'created',
+    direction: 'desc',
+    state: 'open'
+  });
+  const slugs = ghData.map(({ title }) =>
+    slugify(title, { lower: true, replacement: '-' })
+  );
+  const docs = await Promise.all(
+    slugs.map((slug) => getDocBySlug({ slug, fields, label }))
+  );
   return docs;
 }
 
-type TField =
-  | 'slug'
-  | 'content'
-  | 'title'
-  | 'date'
-  | 'excerpt'
-  | 'coverImage'
-  | 'tags';
+type TField = 'slug' | 'content' | 'title' | 'date' | 'excerpt' | 'coverImage';
 
-export const getPostBySlug = (slug: string, fields: TField[] = []) =>
-  getDocBySlug({ dir: 'blog', slug, fields });
+export const getPostBySlug = async (slug: string, fields: TField[] = []) =>
+  await getDocBySlug({ label: 'blog', slug, fields });
 
-export const getBookBySlug = (slug: string, fields: TField[] = []) =>
-  getDocBySlug({ dir: 'books', slug, fields });
+export const getBookBySlug = async (slug: string, fields: TField[] = []) =>
+  await getDocBySlug({ label: 'book', slug, fields });
 
-type IGetAllPosts = Omit<IGetAllDocs<TField>, 'dir'>;
+type IGetAllPosts = Omit<IGetAllDocs<TField>, 'label'>;
 
-export const getAllPosts = (params: IGetAllPosts) =>
-  getAllDocs({ dir: 'blog', ...params });
+export const getAllPosts = async (params: IGetAllPosts) =>
+  await getAllDocs({ label: 'blog', ...params });
 
-export const getAllBooks = (params: IGetAllPosts) =>
-  getAllDocs({ dir: 'books', ...params });
-
-export const getAllTags = (dir: TDir) => {
-  const docs = getAllDocs({ dir, fields: ['tags'] });
-  const tags: Record<string, number> = docs
-    .flatMap((doc) => doc.tags)
-    .filter((tag) => tag)
-    .reduce((a, b) => (a[b] = a[b] + 1 || 1) && a, {});
-
-  return tags;
-};
+export const getAllBooks = async (params: IGetAllPosts) =>
+  await getAllDocs({ label: 'book', ...params });

@@ -1,9 +1,11 @@
-import { SOCIAL_LINKS } from '~/lib/constants';
+import { SITE_NAME, SOCIAL_LINKS } from '~/lib/constants';
 
 export function Footer() {
   return (
     <footer className='flex justify-between w-full pt-20'>
-      <p>&copy; Karim Daghari - {new Date().getFullYear()}</p>
+      <p>
+        &copy; {SITE_NAME} - {new Date().getFullYear()}
+      </p>
       <ul className='inline-flex items-end space-x-2'>
         {SOCIAL_LINKS.map(({ icon: Icon, url, name }) => (
           <a

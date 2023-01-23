@@ -1,12 +1,11 @@
 import { Layout } from '~/components/layout';
-import { getAllPosts, getAllTags } from '~/lib/api';
+import { getAllPosts } from '~/lib/api';
 import type Post from '~/interfaces/post';
 import { PostPreview } from '~/components/post-preview';
+import type { GetStaticProps } from 'next';
 
 interface Props {
   allPosts: Post[];
-  allTags?: ReturnType<typeof getAllTags>;
-  selectedTags?: string[];
 }
 
 export default function BlogIndex({ allPosts }: Props) {
@@ -34,14 +33,13 @@ export default function BlogIndex({ allPosts }: Props) {
   );
 }
 
-export async function getStaticProps() {
-  const allPosts = getAllPosts({
+export const getStaticProps: GetStaticProps = async () => {
+  const allPosts = await getAllPosts({
     fields: ['title', 'date', 'slug', 'excerpt']
   });
 
-  const allTags = getAllTags('blog');
-
   return {
-    props: { allPosts, allTags }
+    props: { allPosts },
+    revalidate: 10
   };
-}
+};

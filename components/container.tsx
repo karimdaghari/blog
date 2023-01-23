@@ -8,6 +8,6 @@ interface Props {
 
 export function Container({ children, className }: Props) {
   return (
-    <div className={cx('max-w-6xl px-5 mx-auto', className)}>{children}</div>
+    <div className={cx('max-w-5xl px-5 mx-auto', className)}>{children}</div>
   );
 }

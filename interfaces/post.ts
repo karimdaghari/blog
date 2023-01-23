@@ -2,7 +2,7 @@ interface PostType {
   slug: string;
   title: string;
   date: string;
-  coverImage: string;
+  coverImage?: string;
   excerpt: string;
   content: string;
   tags: string[];

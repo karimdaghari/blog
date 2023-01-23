@@ -1,8 +1,11 @@
 import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 
-export const CMS_NAME = 'Markdown';
-export const OG_IMAGE_URL =
-  'https://og-image.vercel.app/Next.js%20Blog%20Starter%20Example.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg';
+export const SITE_NAME = 'Karim Daghari';
+export const SITE_URL = 'https://karimdaghari.com';
+
+export const GITHUB_USERNAME = 'karimdaghari';
+export const GITHUB_REPO_NAME = 'blog';
+
 const LINKEDIN = 'https://www.linkedin.com/in/karimdaghari/';
 const GITHUB = 'https://www.github.com/karimdaghari';
 const TWITTER = 'https://www.twitter.com/karimdaghari_';

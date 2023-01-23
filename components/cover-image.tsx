@@ -1,21 +1,24 @@
 import Image, { type ImageProps } from 'next/image';
 
-interface Props extends Pick<ImageProps, 'width' | 'height' | 'unoptimized'> {
+interface Props extends Omit<ImageProps, 'alt'> {
   title: string;
   src: string;
 }
 
-export function CoverImage({ title, src, height, width, unoptimized }: Props) {
+export function CoverImage({
+  title,
+  src,
+  height = 630,
+  width = 1300,
+  ...props
+}: Props) {
   return (
-    <div className='sm:mx-0'>
-      <Image
-        src={src}
-        alt={`Image for ${title}`}
-        className='w-full rounded-lg shadow-sm'
-        width={1300 ?? width}
-        height={630 ?? height}
-        unoptimized={unoptimized}
-      />
-    </div>
+    <Image
+      src={src}
+      alt={`Image for ${title}`}
+      width={width}
+      height={height}
+      {...props}
+    />
   );
 }

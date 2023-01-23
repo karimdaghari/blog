@@ -6,6 +6,7 @@ import { Layout } from '~/components/layout';
 import { getPostBySlug, getAllPosts } from '~/lib/api';
 import markdownToHtml from '~/lib/markdownToHtml';
 import type PostType from '~/interfaces/post';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 
 interface Props {
   post: PostType;
@@ -27,7 +28,7 @@ export default function Post({ post }: Props) {
             <PostHeader
               parent={{ title: 'Blog', slug: '/blog' }}
               title={post.title}
-              coverImage={post.coverImage}
+              coverImage={post?.coverImage}
               date={post.date}
             />
             <PostBody content={post.content} />
@@ -38,14 +39,14 @@ export default function Post({ post }: Props) {
   );
 }
 
-interface Params {
+export const getStaticProps: GetStaticProps = async ({
+  params
+}: {
   params: {
     slug: string;
   };
-}
-
-export async function getStaticProps({ params }: Params) {
-  const post = getPostBySlug(params.slug, [
+}) => {
+  const post = await getPostBySlug(params.slug, [
     'title',
     'date',
     'slug',
@@ -60,12 +61,13 @@ export async function getStaticProps({ params }: Params) {
         ...post,
         content
       }
-    }
+    },
+    revalidate: 10
   };
-}
+};
 
-export async function getStaticPaths() {
-  const posts = getAllPosts({ fields: ['slug'] });
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getAllPosts({ fields: ['slug'] });
 
   return {
     paths: posts.map((post) => {
@@ -77,4 +79,4 @@ export async function getStaticPaths() {
     }),
     fallback: false
   };
-}
+};

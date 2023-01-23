@@ -2,12 +2,13 @@ import { Layout } from '~/components/layout';
 import { getAllBooks } from '~/lib/api';
 import type Post from '~/interfaces/post';
 import { BookPreview } from '~/components/book-preview';
+import type { GetStaticProps } from 'next';
 
 interface Props {
-  allPosts: Post[];
+  allBooks: Post[];
 }
 
-export default function BookIndex({ allPosts }: Props) {
+export default function BookIndex({ allBooks }: Props) {
   return (
     <Layout
       title='Readings'
@@ -17,26 +18,33 @@ export default function BookIndex({ allPosts }: Props) {
         description: "Notes from books I've read."
       }}>
       <div className='space-y-8 md:space-y-10'>
-        {allPosts.map((post) => (
-          <BookPreview
-            key={post.slug}
-            title={post.title}
-            slug={post.slug}
-            excerpt={post.excerpt}
-            coverImage={post.coverImage}
-          />
-        ))}
+        {allBooks.length ? (
+          allBooks.map((post) => (
+            <BookPreview
+              key={post.slug}
+              title={post.title}
+              slug={post.slug}
+              excerpt={post.excerpt}
+              coverImage={post?.coverImage}
+            />
+          ))
+        ) : (
+          <p className='text-center'>
+            {"There's"} nothing in here... <i>Yet</i>.
+          </p>
+        )}
       </div>
     </Layout>
   );
 }
 
-export async function getStaticProps() {
-  const allPosts = getAllBooks({
+export const getStaticProps: GetStaticProps = async () => {
+  const allBooks = await getAllBooks({
     fields: ['title', 'date', 'slug', 'excerpt', 'coverImage']
   });
 
   return {
-    props: { allPosts }
+    props: { allBooks },
+    revalidate: 10
   };
-}
+};

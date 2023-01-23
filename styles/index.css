@@ -12,7 +12,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-bold;
+  @apply font-bold leading-snug;
 }
 
 h1 {
@@ -40,5 +40,5 @@ h6 {
 }
 
 a:not(.block, .inline-block) {
-  @apply font-medium hover:underline hover:after:content-["_→"] ease-in-out;
+  @apply font-medium underline after:content-["_→"] ease-in-out;
 }

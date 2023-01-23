@@ -8,25 +8,27 @@ interface Props {
     title: string;
   };
   title: string;
-  coverImage: string;
+  coverImage?: string;
   date: string;
 }
 
 export function PostHeader({ parent, title, coverImage, date }: Props) {
   return (
     <>
-      <div className='-space-y-2'>
+      <div className='space-y-1'>
         <Link
           href={parent.slug}
           className='inline-block hover:underline underline-offset-2'>
           {parent.title} / {title}
         </Link>
-        <h1>{title}</h1>
+        <h2>{title}</h2>
       </div>
-      <div className='pt-6 pb-4 md:pb-8'>
-        <CoverImage title={title} src={coverImage} />
-      </div>
-      <div className='pb-4'>
+      {coverImage && (
+        <div className='pt-6 pb-4 md:pb-8'>
+          <CoverImage title={title} src={coverImage} />
+        </div>
+      )}
+      <div className='pt-2 pb-4'>
         <DateFormatter dateString={date} />
       </div>
     </>

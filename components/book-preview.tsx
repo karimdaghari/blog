@@ -15,9 +15,17 @@ export function BookPreview({ title, excerpt, slug, coverImage }: Props) {
       title={title}
       description={excerpt}
       aside={
-        <div className='w-full lg:pr-3 h-60'>
-          <CoverImage title={title} src={coverImage} unoptimized />
-          <div className='w-full h-full bg-gray-200 rounded-lg' />
+        <div className='pb-4 lg:pr-3 lg:pb-0'>
+          <CoverImage
+            title={title}
+            src={coverImage}
+            height={150}
+            width={150}
+            unoptimized
+            style={{
+              objectFit: 'cover'
+            }}
+          />
         </div>
       }
     />

@@ -9,10 +9,48 @@
   @apply my-6;
 }
 
+.markdown ol,
+.markdown ul {
+  @apply py-4 space-y-4 list-inside;
+}
+
+.markdown ul > li {
+  @apply before:content-['-_'];
+}
+
+.markdown ol {
+  @apply list-decimal lg:list-outside;
+}
+
 .markdown h2 {
   @apply mt-12 mb-4 text-3xl leading-snug;
 }
 
 .markdown h3 {
   @apply mt-8 mb-4 text-2xl leading-snug;
+}
+
+.markdown a {
+  @apply after:content-none;
+}
+
+.markdown a[href^="https://"]
+{
+  @apply after:content-['_↗'];
+}
+
+.markdown li[id^='user-content-user-content-fn-'] {
+  @apply break-words;
+}
+
+.markdown [id='user-content-footnote-label'] {
+  @apply hidden;
+}
+
+.markdown ol > li[id^='user-content-user-content-fn-'] {
+  @apply first:pt-4 first:border-t;
+}
+
+.markdown img {
+  @apply rounded-lg;
 }

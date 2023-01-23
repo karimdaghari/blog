@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo';
 import type { ReactNode } from 'react';
+import { SITE_NAME, SITE_URL } from '~/lib/constants';
 import { Container } from './container';
 import { Footer } from './footer';
 import { Intro, type IntroProps } from './intro';
@@ -20,15 +21,20 @@ export function Layout({
   title,
   description
 }: Props) {
+  const origin =
+    typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : SITE_URL;
+
   return (
     <>
       <NextSeo
         title={title}
         description={description}
-        titleTemplate='%s | Karim Daghari'
+        titleTemplate={`%s | ${SITE_NAME}`}
         twitter={{
           handle: '@karimdaghari_',
-          site: 'https://karimdaghari.com/'
+          site: origin
         }}
         additionalLinkTags={[
           {
@@ -51,6 +57,13 @@ export function Layout({
           { rel: 'manifest', href: '/favicon/site.webmanifest' },
           { rel: 'shortcut icon', href: '/favicon/favicon.ico' }
         ]}
+        openGraph={{
+          images: [
+            {
+              url: `${origin}/assets/og-image.png`
+            }
+          ]
+        }}
       />
       <Container className='py-8'>
         <Navbar />

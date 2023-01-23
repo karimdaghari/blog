@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SITE_NAME } from '~/lib/constants';
 
 const links = [
   {
@@ -16,7 +17,7 @@ export function Navbar() {
     <nav className='flex items-end justify-between w-full'>
       <h3>
         <Link href='/' className='inline-block'>
-          Karim Daghari
+          {SITE_NAME}
         </Link>
       </h3>
 
