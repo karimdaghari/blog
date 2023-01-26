@@ -32,10 +32,6 @@ export function Layout({
         title={title}
         description={description}
         titleTemplate={`%s | ${SITE_NAME}`}
-        twitter={{
-          handle: '@karimdaghari_',
-          site: origin
-        }}
         additionalLinkTags={[
           {
             rel: 'apple-touch-icon',
