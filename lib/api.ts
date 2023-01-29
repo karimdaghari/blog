@@ -1,6 +1,8 @@
 import matter from 'gray-matter';
 import { Octokit } from 'octokit';
 import slugify from 'slugify';
+import type { IBook } from '~/interfaces/book';
+import type IPost from '~/interfaces/post';
 import { GITHUB_REPO_NAME, GITHUB_USERNAME } from './constants';
 
 type TLabel = 'blog' | 'book';
@@ -80,18 +82,19 @@ async function getAllDocs({ label, fields = [], limit }: IGetAllDocs<string>) {
   return docs;
 }
 
-type TField = 'slug' | 'content' | 'title' | 'date' | 'excerpt' | 'coverImage';
+type TPostFields = keyof IPost;
+type TBookFields = keyof IBook;
 
-export const getPostBySlug = async (slug: string, fields: TField[] = []) =>
+export const getPostBySlug = async (slug: string, fields: TPostFields[] = []) =>
   await getDocBySlug({ label: 'blog', slug, fields });
 
-export const getBookBySlug = async (slug: string, fields: TField[] = []) =>
+export const getBookBySlug = async (slug: string, fields: TBookFields[] = []) =>
   await getDocBySlug({ label: 'book', slug, fields });
 
-type IGetAllPosts = Omit<IGetAllDocs<TField>, 'label'>;
+type TGetAllDocs<T> = Omit<IGetAllDocs<T>, 'label'>;
 
-export const getAllPosts = async (params: IGetAllPosts) =>
+export const getAllPosts = async (params: TGetAllDocs<TPostFields>) =>
   await getAllDocs({ label: 'blog', ...params });
 
-export const getAllBooks = async (params: IGetAllPosts) =>
+export const getAllBooks = async (params: TGetAllDocs<TBookFields>) =>
   await getAllDocs({ label: 'book', ...params });

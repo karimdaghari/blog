@@ -3,15 +3,15 @@ import ErrorPage from 'next/error';
 import { PostBody } from '~/components/post-body';
 import { Layout } from '~/components/layout';
 import markdownToHtml from '~/lib/markdownToHtml';
-import type PostType from '~/interfaces/post';
 import { getBookBySlug, getAllBooks } from '~/lib/api';
 import Link from 'next/link';
 import { DateFormatter } from '~/components/date-formatter';
 import { CoverImage } from '~/components/cover-image';
 import type { GetStaticPaths, GetStaticProps } from 'next';
+import type { IBook } from '~/interfaces/book';
 
 interface Props {
-  book: PostType;
+  book: IBook;
 }
 
 export default function Book({ book }: Props) {
@@ -67,6 +67,10 @@ export default function Book({ book }: Props) {
                 </span>
               </div>
 
+              <div className='pt-8 space-y-2'>
+                <h4>Summary</h4>
+                <PostBody content={book.summary} />
+              </div>
               <PostBody content={book.content} />
             </div>
           </article>
@@ -88,7 +92,8 @@ export const getStaticProps: GetStaticProps = async ({
     'date',
     'slug',
     'content',
-    'coverImage'
+    'coverImage',
+    'summary'
   ]);
   const content = await markdownToHtml(book.content || '');
 

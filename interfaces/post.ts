@@ -1,11 +1,10 @@
-interface PostType {
+interface IPost {
   slug: string;
   title: string;
-  date: string;
+  date?: string;
   coverImage?: string;
   excerpt: string;
   content: string;
-  tags: string[];
 }
 
-export default PostType;
+export default IPost;

@@ -8,6 +8,9 @@ assignees: ''
 ---
 
 ---
+
 excerpt: excerpt
+coverImage:
 ---
+
 content
