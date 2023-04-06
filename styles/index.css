@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  @apply font-mono dark:bg-black dark:text-white;
+  @apply dark:bg-black dark:text-white;
 }
 
 h1,

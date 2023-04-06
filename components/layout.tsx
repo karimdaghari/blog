@@ -2,25 +2,17 @@ import { NextSeo } from 'next-seo';
 import type { ReactNode } from 'react';
 import { SITE_NAME, SITE_URL } from '~/lib/constants';
 import { Container } from './container';
-import { Footer } from './footer';
-import { Intro, type IntroProps } from './intro';
 import { Navbar } from './navbar';
+import clsx from 'clsx';
 
 interface Props {
   children: ReactNode;
   className?: string;
   title: string;
   description?: string;
-  intro?: IntroProps;
 }
 
-export function Layout({
-  children,
-  className,
-  intro,
-  title,
-  description
-}: Props) {
+export function Layout({ children, className, title, description }: Props) {
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
@@ -63,15 +55,7 @@ export function Layout({
       />
       <Container className='py-8'>
         <Navbar />
-        <div className='min-h-screen'>
-          {intro && (
-            <aside>
-              <Intro {...intro} />
-            </aside>
-          )}
-          <main className={className}>{children}</main>
-        </div>
-        <Footer />
+        <main className={clsx('pt-10 lg:pt-16', className)}>{children}</main>
       </Container>
     </>
   );

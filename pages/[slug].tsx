@@ -24,9 +24,8 @@ export default function Post({ post }: Props) {
         <h1>Loading…</h1>
       ) : (
         <>
-          <article className='pt-20 pb-32'>
+          <article className='pb-10 lg:pb-32'>
             <PostHeader
-              parent={{ title: 'Blog', slug: '/blog' }}
               title={post.title}
               coverImage={post?.coverImage}
               date={post.date}
