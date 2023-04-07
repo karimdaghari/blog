@@ -52,8 +52,17 @@ export function Layout({ children, className, title, description }: Props) {
             }
           ]
         }}
+        twitter={{
+          handle: '@karimdaghari_'
+        }}
+        languageAlternates={[
+          {
+            hrefLang: 'en',
+            href: origin
+          }
+        ]}
       />
-      <Container className='py-8'>
+      <Container>
         <Navbar />
         <main className={clsx('pt-10 lg:pt-16', className)}>{children}</main>
       </Container>

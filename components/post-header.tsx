@@ -1,15 +1,18 @@
 import { DateFormatter } from './date-formatter';
 import { CoverImage } from './cover-image';
+import { NextSeo } from 'next-seo';
 
 interface Props {
   title: string;
   coverImage?: string;
   date: string;
+  excerpt?: string;
 }
 
-export function PostHeader({ title, coverImage, date }: Props) {
+export function PostHeader({ title, coverImage, date, excerpt }: Props) {
   return (
     <div>
+      <NextSeo description={excerpt} title={title} />
       <div className='space-y-1'>
         <h2>{title}</h2>
       </div>

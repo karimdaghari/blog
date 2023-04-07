@@ -24,41 +24,45 @@ const REPO = `${GITHUB_USERNAME}/${GITHUB_REPO_NAME}`;
 
 async function getDocBySlug({ label, fields = [], slug }: IGetDocBySlug) {
   const {
-    data: {
-      items: [{ body, title, created_at: date }]
-    }
+    data: { items }
   } = await octokit.rest.search.issuesAndPullRequests({
     q: `repo:${REPO} is:issue is:open label:${label} in:title ${slug.replaceAll(
       '-',
       ' '
     )}`
   });
+  const item = items[0];
+
+  if (!item) return null;
+
+  const { body, title, created_at: date } = item;
+
   const { data, content } = matter(body);
 
-  const items: Record<string, string | undefined> = {
+  const props: Record<string, string | undefined> = {
     title
   };
 
   // Ensure only the minimal needed data is exposed
   fields.forEach((field) => {
     if (field === 'slug') {
-      items[field] = slug;
+      props[field] = slug;
     }
 
     if (field === 'content') {
-      items[field] = content;
+      props[field] = content;
     }
 
     if (field === 'date' && typeof data[field] === 'undefined') {
-      items[field] = date;
+      props[field] = date;
     }
 
     if (typeof data[field] !== 'undefined') {
-      items[field] = data[field];
+      props[field] = data[field];
     }
   });
 
-  return items;
+  return props;
 }
 
 async function getAllDocs({ label, fields = [], limit }: IGetAllDocs<string>) {

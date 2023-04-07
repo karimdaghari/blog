@@ -29,6 +29,7 @@ export default function Post({ post }: Props) {
               title={post.title}
               coverImage={post?.coverImage}
               date={post.date}
+              excerpt={post?.excerpt}
             />
             <PostBody content={post.content} />
           </article>
@@ -50,8 +51,16 @@ export const getStaticProps: GetStaticProps = async ({
     'date',
     'slug',
     'content',
-    'coverImage'
+    'coverImage',
+    'excerpt'
   ]);
+
+  if (!post) {
+    return {
+      notFound: true
+    };
+  }
+
   const content = await markdownToHtml(post.content || '');
 
   return {

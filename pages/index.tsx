@@ -11,7 +11,7 @@ interface Props {
 
 export default function Index({ posts }: Props) {
   return (
-    <Layout title='Hello' className='space-y-8 md:space-y-10'>
+    <Layout title='Hello' className='space-y-6 md:space-y-4'>
       {posts.map((post) => (
         <PostPreview
           key={post.slug}
@@ -31,6 +31,6 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { posts },
-    revalidate: 30
+    revalidate: 10
   };
 };
