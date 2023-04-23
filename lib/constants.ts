@@ -1,4 +1,4 @@
-import { FaLinkedin, FaGithub, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 
 export const SITE_NAME = 'Karim Daghari';
 export const SITE_URL = 'https://karimdaghari.com';
@@ -9,7 +9,6 @@ export const GITHUB_REPO_NAME = 'blog';
 const LINKEDIN = 'https://www.linkedin.com/in/karimdaghari/';
 const GITHUB = 'https://www.github.com/karimdaghari';
 const TWITTER = 'https://www.twitter.com/karimdaghari_';
-const INSTAGRAM = 'https://www.instagram.com/karim_daghari';
 
 export const SOCIAL_LINKS = [
   {
@@ -26,10 +25,5 @@ export const SOCIAL_LINKS = [
     name: 'Twitter',
     url: TWITTER,
     icon: FaTwitter
-  },
-  {
-    name: 'Instagram',
-    url: INSTAGRAM,
-    icon: FaInstagram
   }
 ];
