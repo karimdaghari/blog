@@ -2,7 +2,7 @@ import { Layout } from '~/components/layout';
 import { getAllPosts } from '~/lib/api';
 import type Post from '~/interfaces/post';
 import { PostPreview } from '~/components/post-preview';
-import type { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next/types';
 
 interface Props {
   posts: Post[];
@@ -26,7 +26,8 @@ export default function Index({ posts }: Props) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getAllPosts({
-    fields: ['title', 'date', 'slug']
+    fields: ['title', 'date', 'slug'],
+    labels: ['blog']
   });
 
   return {

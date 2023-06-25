@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
 import { PostBody } from '~/components/post-body';
 import { PostHeader } from '~/components/post-header';
 import { Layout } from '~/components/layout';
 import { getPostBySlug, getAllPosts } from '~/lib/api';
 import markdownToHtml from '~/lib/markdownToHtml';
 import type PostType from '~/interfaces/post';
-import type { GetStaticPaths, GetStaticProps } from 'next';
+import Error from 'next/error';
+import { useRouter } from 'next/router';
+import type { GetStaticProps, GetStaticPaths } from 'next';
 
 interface Props {
   post: PostType;
@@ -16,7 +16,7 @@ interface Props {
 export default function Post({ post }: Props) {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {
-    return <ErrorPage statusCode={404} />;
+    return <Error statusCode={404} />;
   }
   return (
     <Layout title={post.title} description={post.excerpt}>
@@ -75,7 +75,7 @@ export const getStaticProps: GetStaticProps = async ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getAllPosts({ fields: ['slug'] });
+  const posts = await getAllPosts({ fields: ['slug'], labels: ['blog'] });
 
   return {
     paths: posts.map((post) => {

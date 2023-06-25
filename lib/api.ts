@@ -1,18 +1,25 @@
 import matter from 'gray-matter';
 import { Octokit } from 'octokit';
 import slugify from 'slugify';
-import type IPost from '~/interfaces/post';
+import type Post from '~/interfaces/post';
 import { GITHUB_REPO_NAME, GITHUB_USERNAME } from './constants';
 
-type TLabel = 'blog' | 'book';
+type TLabel =
+  | 'unlisted'
+  | 'blog'
+  | 'book'
+  | 'draft'
+  | 'project'
+  | (string & {});
 
-interface IGetAllDocs<T> {
-  label: TLabel;
+interface GetAllDocsParams<T> {
+  labels: TLabel[];
   fields: T[];
   limit?: number;
 }
 
-interface IGetDocBySlug extends Omit<IGetAllDocs<string>, 'limit' | 'tags'> {
+interface GetDocBySlugParams
+  extends Omit<GetAllDocsParams<string>, 'limit' | 'tags'> {
   slug: string;
 }
 
@@ -22,7 +29,11 @@ const octokit = new Octokit({
 
 const REPO = `${GITHUB_USERNAME}/${GITHUB_REPO_NAME}`;
 
-async function getDocBySlug({ label, fields = [], slug }: IGetDocBySlug) {
+async function getDocBySlug({
+  labels: label,
+  fields = [],
+  slug
+}: GetDocBySlugParams) {
   const {
     data: { items }
   } = await octokit.rest.search.issuesAndPullRequests({
@@ -65,32 +76,36 @@ async function getDocBySlug({ label, fields = [], slug }: IGetDocBySlug) {
   return props;
 }
 
-async function getAllDocs({ label, fields = [], limit }: IGetAllDocs<string>) {
-  const { data: ghData } = await octokit.rest.issues.listForRepo({
-    owner: GITHUB_USERNAME,
-    repo: GITHUB_REPO_NAME,
-    creator: GITHUB_USERNAME,
-    labels: label,
-    per_page: limit,
-    sort: 'created',
-    direction: 'desc',
-    state: 'open'
-  });
-  const slugs = ghData.map(({ title }) =>
+async function getAllDocs({
+  labels,
+  fields = [],
+  limit
+}: GetAllDocsParams<string>) {
+  const data = await octokit.rest.issues
+    .listForRepo({
+      owner: GITHUB_USERNAME,
+      repo: GITHUB_REPO_NAME,
+      creator: GITHUB_USERNAME,
+      labels: labels.join(','),
+      per_page: limit,
+      sort: 'created',
+      direction: 'desc',
+      state: 'open'
+    })
+    .then(({ data }) => data);
+  const slugs = data.map(({ title }) =>
     slugify(title, { lower: true, replacement: '-' })
   );
   const docs = await Promise.all(
-    slugs.map((slug) => getDocBySlug({ slug, fields, label }))
+    slugs.map((slug) => getDocBySlug({ slug, fields, labels }))
   );
   return docs;
 }
 
-type TPostFields = keyof IPost;
+type TPostFields = keyof Post;
 
 export const getPostBySlug = async (slug: string, fields: TPostFields[] = []) =>
-  await getDocBySlug({ label: 'blog', slug, fields });
+  await getDocBySlug({ labels: ['blog', 'unlisted', 'draft'], slug, fields });
 
-type TGetAllDocs<T> = Omit<IGetAllDocs<T>, 'label'>;
-
-export const getAllPosts = async (params: TGetAllDocs<TPostFields>) =>
-  await getAllDocs({ label: 'blog', ...params });
+export const getAllPosts = async (params: GetAllDocsParams<TPostFields>) =>
+  await getAllDocs({ labels: 'blog', ...params });
