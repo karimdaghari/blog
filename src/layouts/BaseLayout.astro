@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseHead from '~/components/BaseHead.astro';
+import Header from '~/components/Header.astro';
+import BottomNavigation from '~/components/ui/bottom-navigation';
+import { Config } from '~/consts';
+import HTML from './HTML.astro';
+
+interface Props {
+  class?: string;
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { class: className, title, ...headProps } = Astro.props;
+---
+
+<HTML>
+  <head>
+    <BaseHead
+      title={title === Config.title ? title : `${title} | ${Config.title}`}
+      {...headProps}
+    />
+  </head>
+  <body>
+    <Header />
+    <main
+      class='relative pb-16'
+      class:list={[className]}>
+      <slot />
+      <div class='fixed bottom-3 inset-x-0'>
+        <BottomNavigation client:only='react'>
+          <a
+            slot='home'
+            href='/'
+            aria-label='Home'>
+            <Icon
+              name='lucide:home'
+              class:list={['size-6']}
+            />
+          </a>
+          <a
+            slot='blog'
+            href='/blog'
+            aria-label='Blog'>
+            <Icon
+              name='lucide:notebook-text'
+              class:list={['size-6']}
+            />
+          </a>
+          {
+            Config.socials.x && (
+              <a
+                slot='x'
+                href={`https://x.com/${Config.socials.x}`}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='X'>
+                <Icon
+                  name='simple-icons:x'
+                  class='size-5'
+                />
+              </a>
+            )
+          }
+          {
+            Config.socials.linkedin && (
+              <a
+                slot='linkedin'
+                href={`https://linkedin.com/in/${Config.socials.linkedin}`}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='LinkedIn'>
+                <Icon
+                  name='simple-icons:linkedin'
+                  class='size-5'
+                />
+              </a>
+            )
+          }
+          {
+            Config.socials.github && (
+              <a
+                slot='github'
+                href={`https://github.com/${Config.socials.github}`}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='GitHub'>
+                <Icon
+                  name='simple-icons:github'
+                  class='size-5'
+                />
+              </a>
+            )
+          }
+        </BottomNavigation>
+      </div>
+    </main>
+  </body>
+</HTML>

@@ -1,0 +1,19 @@
+---
+import BlogList from '~/components/BlogList.astro';
+import { Config } from '~/consts';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title={Config.sections.blog.title}
+	description={Config.sections.blog.description}>
+	<div class='mb-6'>
+		<h4>
+			{Config.sections.blog.title}
+		</h4>
+		<p>
+			{Config.sections.blog.description}
+		</p>
+	</div>
+	<BlogList />
+</BaseLayout>

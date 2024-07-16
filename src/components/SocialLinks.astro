@@ -1,0 +1,26 @@
+---
+import { Icon } from "astro-icon/components";
+import { getSocialLinks } from "~/lib/helpers";
+
+const socials = getSocialLinks();
+---
+
+<div class='flex items-center gap-2'>
+  {
+    socials.map(({ icon, ariaLabel, name }) => {
+      return (
+        <a
+          href={`/${name}`}
+          target='_blank'
+          rel='noopener noreferrer'
+          class='text-gray-500 hover:text-gray-700'
+          aria-label={ariaLabel}>
+          <Icon
+            name={icon}
+            class='size-5'
+          />
+        </a>
+      );
+    })
+  }
+</div>

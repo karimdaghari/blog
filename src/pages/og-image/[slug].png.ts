@@ -1,0 +1,108 @@
+import satori from "satori";
+import { html } from "satori-html";
+import { Resvg } from "@resvg/resvg-js";
+import { getCollection } from "astro:content";
+import type { APIRoute } from "astro";
+import type { ReactNode } from "react";
+import { readFile } from "node:fs/promises";
+import { Config } from "~/consts";
+
+const dimensions = {
+	width: 1200,
+	height: 630,
+} as const;
+
+type Props = Awaited<ReturnType<typeof getStaticPaths>>[number]["props"];
+
+export const GET: APIRoute<Props> = async (context) => {
+	const { title, pubDate, description } = context.props;
+	const date = pubDate.toLocaleDateString("en-US", {
+		dateStyle: "medium",
+	});
+
+	const avatar =
+		process.env.NODE_ENV === "production"
+			? (`${Config.siteUrl}${Config.me.picture}` as const)
+			: (`http://localhost:4321${Config.me.picture}` as const);
+
+	const htmlContent = html`
+    <div tw='flex flex-col justify-between items-center h-full w-full bg-white py-4'>
+			<div tw='flex flex-col justify-center items-center'>
+				<img tw='w-32 h-32 rounded-full' src='${avatar}' alt='avatar' />
+				<p tw='font-medium tracking-widest'>${Config.me.fullName}</p>
+			</div>
+			<div tw='flex flex-col justify-center items-center max-w-6xl mx-auto -mt-24'>
+				<p>${date}</p>
+      	<h1 tw='text-4xl -mb-2 -mt-0.5'>${title}</h1>
+				<div tw='max-w-5xl mx-auto flex flex-col items-center justify-center'>
+					<p>${description}</p>
+				</div>
+			</div>
+			<p tw='font-semibold tracking-widest'>${Config.siteUrl}</p>
+    </div>
+  ` as ReactNode;
+
+	const fonts = {
+		regular: await readFile("src/assets/fonts/Inter-Regular.ttf"),
+		bold: await readFile("src/assets/fonts/Inter-Bold.ttf"),
+		medium: await readFile("src/assets/fonts/Inter-Medium.ttf"),
+		semiBold: await readFile("src/assets/fonts/Inter-SemiBold.ttf"),
+	};
+
+	const svg = await satori(htmlContent, {
+		width: dimensions.width,
+		height: dimensions.height,
+		fonts: [
+			{
+				name: "Inter",
+				data: fonts.regular,
+				weight: 400,
+				style: "normal",
+			},
+			{
+				name: "Inter",
+				data: fonts.medium,
+				weight: 500,
+				style: "normal",
+			},
+			{
+				name: "Inter",
+				data: fonts.semiBold,
+				weight: 600,
+				style: "normal",
+			},
+			{
+				name: "Inter",
+				data: fonts.bold,
+				weight: 700,
+				style: "normal",
+			},
+		],
+	});
+
+	const resvg = new Resvg(svg);
+	const pngBuffer = resvg.render().asPng();
+
+	return new Response(pngBuffer, {
+		headers: {
+			"Content-Type": "image/png",
+		},
+	});
+};
+
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+	const paths = posts.map((post) => {
+		return {
+			params: {
+				slug: post.slug,
+			},
+			props: {
+				title: post.data.title,
+				pubDate: post.data.updatedDate ?? post.data.pubDate,
+				description: post.data.description,
+			},
+		};
+	});
+	return paths;
+}

@@ -1,0 +1,10 @@
+---
+import { ResumeEnglish } from "~/components/resume";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title='Resume'
+  description='My resume'>
+  <ResumeEnglish client:only='react' />
+</BaseLayout>

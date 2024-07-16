@@ -1,0 +1,60 @@
+---
+import { Image } from "astro:assets";
+import IndexSection from "~/components/IndexSection.astro";
+import LatestPosts from "~/components/LatestPosts.astro";
+import SocialLinks from "~/components/SocialLinks.astro";
+import { Config } from "~/consts";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title={Config.title}
+	description={Config.description}
+	class='space-y-16 relative'>
+	<section
+		class='flex lg:flex-row flex-col items-center w-full lg:justify-between lg:space-x-3'>
+		<div class='lg:max-w-lg w-full lg:order-1 order-2 lg:mt-0 mt-4'>
+			<h3>Hi! I'm {Config.me.name} 👋</h3>
+			<p>
+				{Config.me.intro_long}
+			</p>
+			<div class='mt-2'>
+				<SocialLinks />
+			</div>
+		</div>
+		<Image
+			loading='eager'
+			src={Config.me.picture}
+			height={160}
+			width={160}
+			alt='Karim'
+			class='rounded-full lg:order-2 order-1'
+		/>
+	</section>
+	<IndexSection
+		title={Config.sections.blog.title}
+		intro={Config.sections.blog.intro}
+		description={Config.sections.blog.description}>
+		<LatestPosts />
+	</IndexSection>
+	<IndexSection
+		title={Config.sections.contact.title}
+		intro={Config.sections.contact.intro}
+		class='max-w-xl mx-auto'>
+		<p class='lg:text-2xl text-lg text-center'>
+			Want to chat? Feel free to <a
+				href={`https://x.com/${Config.socials.x}`}
+				target='_blank'
+				rel='noopener noreferrer'
+				class='text-blue-500 hover:text-blue-600 hover:underline hover:underline-offset-2'>
+				DM me directly on X
+			</a> or drop me <a
+				href={`https://linkedin.com/in/${Config.socials.linkedin}`}
+				target='_blank'
+				rel='noopener noreferrer'
+				class='text-blue-500 hover:text-blue-600 hover:underline hover:underline-offset-2'>
+				a message on LinkedIn
+			</a>
+		</p>
+	</IndexSection>
+</BaseLayout>
