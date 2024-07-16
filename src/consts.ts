@@ -15,7 +15,7 @@ export const Config = {
 		intro_long:
 			"I'm a full-stack developer with an entrepreneurial spirit (and experience). I love building things that solve problems.",
 		intro_short: "Full-stack developer, entrepreneur, and writer.",
-		picture: "/me.jpeg",
+		picture: "/me.png",
 		phoneNumber: "(+216) 96 994 074",
 		email: "hello@karimdaghari.com",
 	},

@@ -1,4 +1,3 @@
-import satori from "satori";
 import { html } from "satori-html";
 import { Resvg } from "@resvg/resvg-js";
 import { getCollection } from "astro:content";
@@ -6,11 +5,7 @@ import type { APIRoute } from "astro";
 import type { ReactNode } from "react";
 import { readFile } from "node:fs/promises";
 import { Config } from "~/consts";
-
-const dimensions = {
-	width: 1200,
-	height: 630,
-} as const;
+import { satori } from "~/lib/satori";
 
 type Props = Awaited<ReturnType<typeof getStaticPaths>>[number]["props"];
 
@@ -28,7 +23,7 @@ export const GET: APIRoute<Props> = async (context) => {
 	const htmlContent = html`
     <div tw='flex flex-col justify-between items-center h-full w-full bg-white py-4'>
 			<div tw='flex flex-col justify-center items-center'>
-				<img tw='w-32 h-32 rounded-full' src='${avatar}' alt='avatar' />
+				<img tw='w-32 h-32 rounded-full' src='${avatar}' alt='avatar' height="128" width="128" />
 				<p tw='font-medium tracking-widest'>${Config.me.fullName}</p>
 			</div>
 			<div tw='flex flex-col justify-center items-center max-w-6xl mx-auto -mt-24'>
@@ -42,43 +37,7 @@ export const GET: APIRoute<Props> = async (context) => {
     </div>
   ` as ReactNode;
 
-	const fonts = {
-		regular: await readFile("src/assets/fonts/Inter-Regular.ttf"),
-		bold: await readFile("src/assets/fonts/Inter-Bold.ttf"),
-		medium: await readFile("src/assets/fonts/Inter-Medium.ttf"),
-		semiBold: await readFile("src/assets/fonts/Inter-SemiBold.ttf"),
-	};
-
-	const svg = await satori(htmlContent, {
-		width: dimensions.width,
-		height: dimensions.height,
-		fonts: [
-			{
-				name: "Inter",
-				data: fonts.regular,
-				weight: 400,
-				style: "normal",
-			},
-			{
-				name: "Inter",
-				data: fonts.medium,
-				weight: 500,
-				style: "normal",
-			},
-			{
-				name: "Inter",
-				data: fonts.semiBold,
-				weight: 600,
-				style: "normal",
-			},
-			{
-				name: "Inter",
-				data: fonts.bold,
-				weight: 700,
-				style: "normal",
-			},
-		],
-	});
+	const svg = await satori(htmlContent);
 
 	const resvg = new Resvg(svg);
 	const pngBuffer = resvg.render().asPng();
