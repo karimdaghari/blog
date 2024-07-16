@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import type { ReactNode } from "react";
 import $satori, { type SatoriOptions as Options } from "satori";
 import { Config } from "~/consts";
