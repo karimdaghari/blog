@@ -14,16 +14,9 @@ export const GET: APIRoute<Props> = async (context) => {
 		dateStyle: "medium",
 	});
 
-	const avatar = import.meta.env.PROD
-		? (`${Config.siteUrl}${Config.me.picture}` as const)
-		: (`http://localhost:4321${Config.me.picture}` as const);
-
 	const htmlContent = html`
     <div tw='flex flex-col justify-between items-center h-full w-full bg-white py-4'>
-			<div tw='flex flex-col justify-center items-center'>
-				<img tw='w-32 h-32 rounded-full' src='${avatar}' alt='avatar' height="128" width="128" />
-				<p tw='font-medium tracking-widest'>${Config.me.fullName}</p>
-			</div>
+			<p tw='font-medium'>${Config.me.fullName}</p>
 			<div tw='flex flex-col justify-center items-center max-w-6xl mx-auto -mt-24'>
 				<p>${date}</p>
       	<h1 tw='text-4xl -mb-2 -mt-0.5'>${title}</h1>
@@ -31,7 +24,7 @@ export const GET: APIRoute<Props> = async (context) => {
 					<p>${description}</p>
 				</div>
 			</div>
-			<p tw='font-semibold tracking-widest'>${Config.siteUrl}</p>
+			<p tw='font-semibold'>${Config.siteUrl}</p>
     </div>
   ` as ReactNode;
 
