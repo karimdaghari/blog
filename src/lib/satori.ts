@@ -1,17 +1,28 @@
 import { readFile } from "node:fs/promises";
 import type { ReactNode } from "react";
 import $satori, { type SatoriOptions as Options } from "satori";
+import { Config } from "~/consts";
 
 const dimensions = {
 	width: 1200,
 	height: 630,
 } as const;
 
+const getFont = async (name: string) => {
+	const domain =
+		process.env.NODE_ENV === "production"
+			? Config.siteUrl
+			: "http://localhost:4321";
+	return await fetch(`${domain}/fonts/${name}.ttf`).then((res) =>
+		res.arrayBuffer(),
+	);
+};
+
 const fonts = {
-	regular: await readFile("src/assets/fonts/Inter-Regular.ttf"),
-	bold: await readFile("src/assets/fonts/Inter-Bold.ttf"),
-	medium: await readFile("src/assets/fonts/Inter-Medium.ttf"),
-	semiBold: await readFile("src/assets/fonts/Inter-SemiBold.ttf"),
+	regular: await getFont("Inter-Regular"),
+	bold: await getFont("Inter-Bold"),
+	medium: await getFont("Inter-Medium"),
+	semiBold: await getFont("Inter-SemiBold"),
 };
 
 export const satori = async (content: ReactNode, options?: Options) =>
