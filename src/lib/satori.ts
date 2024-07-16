@@ -10,7 +10,7 @@ const dimensions = {
 
 const getFont = async (name: string) => {
 	const pathName = import.meta.env.PROD
-		? "."
+		? join(process.cwd(), "dist")
 		: join(process.cwd(), "src/assets");
 	const pathname = `${pathName}/fonts/${name}.ttf`;
 	console.log(pathname);
