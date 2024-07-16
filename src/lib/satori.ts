@@ -1,6 +1,6 @@
+import { readFile } from "node:fs/promises";
 import type { ReactNode } from "react";
 import $satori, { type SatoriOptions as Options } from "satori";
-import { readFile } from "node:fs/promises";
 
 const dimensions = {
 	width: 1200,

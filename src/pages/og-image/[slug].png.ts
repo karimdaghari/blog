@@ -1,9 +1,8 @@
-import { html } from "satori-html";
-import { Resvg } from "@resvg/resvg-js";
 import { getCollection } from "astro:content";
+import { Resvg } from "@resvg/resvg-js";
 import type { APIRoute } from "astro";
 import type { ReactNode } from "react";
-import { readFile } from "node:fs/promises";
+import { html } from "satori-html";
 import { Config } from "~/consts";
 import { satori } from "~/lib/satori";
 

@@ -1,7 +1,7 @@
-import { html } from "satori-html";
 import { Resvg } from "@resvg/resvg-js";
 import type { APIRoute } from "astro";
 import type { ReactNode } from "react";
+import { html } from "satori-html";
 import { Config } from "~/consts";
 import { satori } from "~/lib/satori";
 

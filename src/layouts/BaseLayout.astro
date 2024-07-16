@@ -1,16 +1,16 @@
 ---
-import { Icon } from 'astro-icon/components';
-import BaseHead from '~/components/BaseHead.astro';
-import Header from '~/components/Header.astro';
-import BottomNavigation from '~/components/ui/bottom-navigation';
-import { Config } from '~/consts';
-import HTML from './HTML.astro';
+import { Icon } from "astro-icon/components";
+import BaseHead from "~/components/BaseHead.astro";
+import Header from "~/components/Header.astro";
+import BottomNavigation from "~/components/ui/bottom-navigation";
+import { Config } from "~/consts";
+import HTML from "./HTML.astro";
 
 interface Props {
-  class?: string;
-  title: string;
-  description: string;
-  image?: string;
+	class?: string;
+	title: string;
+	description: string;
+	image?: string;
 }
 
 const { class: className, title, ...headProps } = Astro.props;
