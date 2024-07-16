@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import $satori, { type SatoriOptions as Options } from "satori";
-import { Config } from "~/consts";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const dimensions = {
 	width: 1200,
@@ -8,11 +9,12 @@ const dimensions = {
 } as const;
 
 const getFont = async (name: string) => {
-	const domain = import.meta.env.PROD
-		? Config.siteUrl
-		: "http://localhost:4321";
-	const pathname = `${domain}/fonts/${name}.ttf`;
-	return await fetch(pathname).then((res) => res.arrayBuffer());
+	const pathName = import.meta.env.PROD
+		? "."
+		: join(process.cwd(), "src/assets");
+	const pathname = `${pathName}/fonts/${name}.ttf`;
+	console.log(pathname);
+	return await readFile(pathname);
 };
 
 const fonts = {
