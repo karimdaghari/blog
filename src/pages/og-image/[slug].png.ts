@@ -14,10 +14,9 @@ export const GET: APIRoute<Props> = async (context) => {
 		dateStyle: "medium",
 	});
 
-	const avatar =
-		process.env.NODE_ENV === "production"
-			? (`${Config.siteUrl}${Config.me.picture}` as const)
-			: (`http://localhost:4321${Config.me.picture}` as const);
+	const avatar = import.meta.env.PROD
+		? (`${Config.siteUrl}${Config.me.picture}` as const)
+		: (`http://localhost:4321${Config.me.picture}` as const);
 
 	const htmlContent = html`
     <div tw='flex flex-col justify-between items-center h-full w-full bg-white py-4'>

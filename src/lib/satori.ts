@@ -1,20 +1,20 @@
+import { readFile } from "node:fs/promises";
 import type { ReactNode } from "react";
 import $satori, { type SatoriOptions as Options } from "satori";
-import { Config } from "~/consts";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const dimensions = {
 	width: 1200,
 	height: 630,
 } as const;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const getFont = async (name: string) => {
-	const domain =
-		process.env.NODE_ENV === "production"
-			? Config.siteUrl
-			: "http://localhost:4321";
-	return await fetch(`${domain}/fonts/${name}.ttf`).then((res) =>
-		res.arrayBuffer(),
-	);
+	const path = join(__dirname, "../assets/fonts", `${name}.ttf`);
+	return await readFile(path);
 };
 
 const fonts = {

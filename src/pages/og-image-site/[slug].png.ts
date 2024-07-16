@@ -10,10 +10,9 @@ type Params = Awaited<ReturnType<typeof getStaticPaths>>[number]["params"];
 export const GET: APIRoute<never, Params> = async (context) => {
 	const { slug } = context.params;
 
-	const avatar =
-		process.env.NODE_ENV === "production"
-			? (`${Config.siteUrl}${Config.me.picture}` as const)
-			: (`http://localhost:4321${Config.me.picture}` as const);
+	const avatar = import.meta.env.PROD
+		? (`${Config.siteUrl}${Config.me.picture}` as const)
+		: (`http://localhost:4321${Config.me.picture}` as const);
 
 	let title = "";
 	let description = "";
@@ -32,7 +31,7 @@ export const GET: APIRoute<never, Params> = async (context) => {
 	const htmlContent = html`
     <div tw='flex flex-col justify-between items-center h-full w-full bg-white p-4'>
 			<p tw='font-medium tracking-widest'>${Config.me.fullName}</p>
-			<div tw='flex items-center space-x-4'>
+			<div tw='flex items-center'>
 				<div tw='flex flex-col justify-center items-center w-1/2'>
 					<div tw='flex flex-col max-w-96 mx-auto'>
 						<h1 tw='-mb-4'>${title}</h1>
