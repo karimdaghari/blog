@@ -1,10 +1,11 @@
 ---
-import { ResumeFrench } from "~/components/resume";
-import BaseLayout from "~/layouts/BaseLayout.astro";
+import { ResumeFrench } from '~/components/resume';
+import BaseLayout from '~/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title='CV'
-  description='Le CV de Karim'>
+  description='Le CV de Karim'
+  image='/og-image-site/resume.png'>
   <ResumeFrench client:only='react' />
 </BaseLayout>

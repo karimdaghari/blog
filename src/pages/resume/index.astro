@@ -1,10 +1,11 @@
 ---
-import { ResumeEnglish } from "~/components/resume";
-import BaseLayout from "~/layouts/BaseLayout.astro";
+import { ResumeEnglish } from '~/components/resume';
+import BaseLayout from '~/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title='Resume'
-  description='My resume'>
+  description='My resume'
+  image='/og-image-site/resume.png'>
   <ResumeEnglish client:only='react' />
 </BaseLayout>
