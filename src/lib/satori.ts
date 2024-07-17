@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import type { ReactNode } from "react";
 import $satori, { type SatoriOptions as Options } from "satori";
-import { join } from "node:path";
+import { resolve } from "node:path";
 
 const dimensions = {
 	width: 1200,
@@ -9,11 +9,11 @@ const dimensions = {
 } as const;
 
 const getFont = async (name: string) => {
-	const pathname = join(
-		process.cwd(),
-		import.meta.env.PROD ? "dist" : "public",
+	const pathname = resolve(
+		import.meta.env.PROD ? "./" : "public",
 		`fonts/${name.toLowerCase()}.ttf`,
 	);
+	console.log(pathname);
 	return await readFile(pathname);
 };
 
