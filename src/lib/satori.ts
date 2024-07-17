@@ -9,12 +9,7 @@ const dimensions = {
 } as const;
 
 const getFont = async (name: string) => {
-	const pathname = resolve(
-		import.meta.env.PROD ? "./" : "public",
-		`fonts/${name.toLowerCase()}.ttf`,
-	);
-	console.log(pathname);
-	return await readFile(pathname);
+	return await readFile(resolve(`./public/fonts/${name}.ttf`));
 };
 
 const fonts = {
