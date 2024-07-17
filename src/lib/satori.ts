@@ -12,12 +12,8 @@ const getFont = async (name: string) => {
 	const pathname = join(
 		process.cwd(),
 		import.meta.env.PROD ? "dist" : "public",
-		`fonts/${name}.ttf`,
+		`fonts/${name.toLowerCase()}.ttf`,
 	);
-	console.log({
-		cwd: process.cwd(),
-		pathname,
-	});
 	return await readFile(pathname);
 };
 
