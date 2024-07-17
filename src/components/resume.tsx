@@ -53,9 +53,7 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 		paddingBottom: 3,
 		borderBottomWidth: 1.25,
-		borderBottomColor: "#1D428A",
 		textTransform: "uppercase",
-		color: "#1D428A",
 	},
 	leftColumn: {
 		flexDirection: "column",
