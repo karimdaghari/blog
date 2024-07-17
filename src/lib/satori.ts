@@ -11,10 +11,13 @@ const dimensions = {
 const getFont = async (name: string) => {
 	const pathname = join(
 		process.cwd(),
-		import.meta.env.PROD ? "dist/public" : "public",
+		import.meta.env.PROD ? "dist" : "public",
 		`fonts/${name}.ttf`,
 	);
-	console.log({ pathname });
+	console.log({
+		cwd: process.cwd(),
+		pathname,
+	});
 	return await readFile(pathname);
 };
 
