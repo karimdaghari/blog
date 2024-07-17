@@ -19,6 +19,5 @@ export default defineConfig({
 		icon(),
 		react(),
 	],
-	output: "server",
 	adapter: netlify(),
 });
