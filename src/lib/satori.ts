@@ -8,9 +8,8 @@ const dimensions = {
 	height: 630,
 } as const;
 
-const getFont = async (name: string) => {
-	return await readFile(resolve(`./public/fonts/${name}.ttf`));
-};
+const getFont = async (name: string) =>
+	await readFile(resolve(`./public/fonts/${name}.ttf`));
 
 const fonts = {
 	regular: await getFont("Inter-Regular"),
