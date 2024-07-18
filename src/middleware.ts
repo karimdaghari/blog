@@ -1,6 +1,8 @@
 import { defineMiddleware } from "astro:middleware";
 import { getSocialLinks } from "./lib/helpers";
 
+export const prerender = false;
+
 export const onRequest = defineMiddleware(({ redirect, url }, next) => {
 	const pathname = url.pathname.slice(1);
 
