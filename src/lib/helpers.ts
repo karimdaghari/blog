@@ -17,6 +17,9 @@ export const getSocialLinks = () => {
 				case "linkedin":
 					url = `https://linkedin.com/in/${username}`;
 					break;
+				case "instagram":
+					url = `https://instagram.com/${username}`;
+					break;
 			}
 			const icon = `simple-icons:${network}` as const;
 			const ariaLabel = `${Config.me.name} on ${network}` as const;

@@ -41,5 +41,6 @@ export const Config = {
 		github: "karimdaghari",
 		linkedin: "karimdaghari",
 		x: "@karimdaghari_",
+		instagram: "karimdaghari_",
 	},
 } as const;
