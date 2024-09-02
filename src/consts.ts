@@ -40,7 +40,5 @@ export const Config = {
 	socials: {
 		github: "karimdaghari",
 		linkedin: "karimdaghari",
-		x: "@karimdaghari_",
-		instagram: "karimdaghari_",
 	},
 } as const;
