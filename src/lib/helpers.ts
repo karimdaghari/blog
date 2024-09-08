@@ -8,17 +8,11 @@ export const getSocialLinks = () => {
 			const username = Config.socials[network];
 			let url = "";
 			switch (network) {
-				case "x":
-					url = `https://x.com/${username}`;
-					break;
 				case "github":
 					url = `https://github.com/${username}`;
 					break;
 				case "linkedin":
 					url = `https://linkedin.com/in/${username}`;
-					break;
-				case "instagram":
-					url = `https://instagram.com/${username}`;
 					break;
 			}
 			const icon = `simple-icons:${network}` as const;
